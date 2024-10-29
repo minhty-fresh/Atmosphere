@@ -1,6 +1,7 @@
 package com.minhtyfresh.atmosphere.mixin.client;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import com.minhtyfresh.atmosphere.client.AtmosphereClientDataManager;
 import com.minhtyfresh.atmosphere.helper.OverworldFogRenderer;
@@ -23,8 +24,13 @@ public abstract class FogRendererMixin {
             at = @At("RETURN")
     )
     private static void setupFog(
-            Camera camera, FogRenderer.FogMode fogMode, float farPlaneDistance, boolean levelOrSpecialFog, float f, CallbackInfo ci, @Local boolean hasMobEffectFog
-
+            Camera camera,
+            FogRenderer.FogMode fogMode,
+            float farPlaneDistance,
+            boolean levelOrSpecialFog,
+            float f,
+            CallbackInfo ci,
+            @Share("hasMobEffectFog") LocalBooleanRef hasMobEffectFogRef
     )
     {
         // todo set up config to disable
@@ -32,7 +38,7 @@ public abstract class FogRendererMixin {
         if (AtmosphereClientDataManager.getInstance().isFoggy
                 && camera.getFluidInCamera() == FogType.NONE // not in liquid
                 && !levelOrSpecialFog                        // don't override nether fog and other special fog conditions
-                && !hasMobEffectFog                          // don't override mob effect fog functions like blindness
+                && !hasMobEffectFogRef.get()                 // don't override mob effect fog functions like blindness
         ) {
             OverworldFogRenderer.overrideFog(RenderSystem::setShaderFogStart, RenderSystem::setShaderFogEnd);
         }
@@ -40,8 +46,15 @@ public abstract class FogRendererMixin {
 
     @Inject(method = "setupFog",
             at = @At(value = "HEAD"))
-    private static void beforeSetupFog(Camera camera, FogRenderer.FogMode fogMode, float farPlaneDistance, boolean bl, float f, CallbackInfo ci) {
-        boolean hasMobEffectFog = false;
+    private static void beforeSetupFog(
+            Camera camera,
+            FogRenderer.FogMode fogMode,
+            float farPlaneDistance,
+            boolean bl,
+            float f,
+            CallbackInfo ci,
+            @Share("hasMobEffectFog") LocalBooleanRef hasMobEffectFogRef) {
+        hasMobEffectFogRef.set(false);
     }
 
 
@@ -49,7 +62,14 @@ public abstract class FogRendererMixin {
     at = @At(value = "INVOKE",
             target = "Lnet/minecraft/client/renderer/FogRenderer$MobEffectFogFunction;setupFog(Lnet/minecraft/client/renderer/FogRenderer$FogData;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/effect/MobEffectInstance;FF)V",
             shift = At.Shift.AFTER))
-    private static void test(Camera camera, FogRenderer.FogMode fogMode, float farPlaneDistance, boolean bl, float f, CallbackInfo ci, @Local LocalBooleanRef localRefHasMobFogEffect) {
-        localRefHasMobFogEffect.set(Boolean.TRUE);
+    private static void test(
+            Camera camera,
+            FogRenderer.FogMode fogMode,
+            float farPlaneDistance,
+            boolean bl,
+            float f,
+            CallbackInfo ci,
+            @Share("hasMobEffectFog") LocalBooleanRef hasMobEffectFogRef) {
+        hasMobEffectFogRef.set(true);
     }
 }

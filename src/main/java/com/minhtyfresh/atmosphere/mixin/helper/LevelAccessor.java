@@ -1,4 +1,4 @@
-package com.minhtyfresh.atmosphere.mixin;
+package com.minhtyfresh.atmosphere.mixin.helper;
 
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;

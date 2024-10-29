@@ -1,6 +1,7 @@
 package com.minhtyfresh.atmosphere.mixin;
 
 import com.minhtyfresh.atmosphere.helper.LightLevelHelper;
+import com.minhtyfresh.atmosphere.mixin.helper.LevelAccessor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
@@ -9,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Level.class)
-public abstract class LevelMixin implements LevelAccessor{
+public abstract class LevelMixin implements LevelAccessor {
     @Inject(method = "updateSkyBrightness", at = @At(value = "HEAD"), cancellable = true)
     public void updateSkyBrightness(CallbackInfo ci) {
         Level level = (Level)(Object)this;

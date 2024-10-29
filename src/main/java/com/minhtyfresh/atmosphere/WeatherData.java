@@ -10,8 +10,11 @@ import org.jetbrains.annotations.NotNull;
 public class WeatherData extends SavedData {
 
     public static String NAME = "atmosphere_weather_data";
-    public boolean isFoggy;
-    public int fogTime;
+    private boolean isFoggy;
+    private int fogTime;
+
+    private float oldFogLevel;
+    private float fogLevel;
 
     @Override
     public @NotNull CompoundTag save(CompoundTag nbt) {
@@ -43,5 +46,29 @@ public class WeatherData extends SavedData {
 
     public void setFogTime(int fogTime) {
         this.fogTime = fogTime;
+    }
+
+    public void setFogLevel(float FogLevel) {
+        this.fogLevel = fogLevel;
+    }
+
+    public void setOldFogLevel(float oldFogLevel) {
+        this.oldFogLevel = oldFogLevel;
+    }
+
+    public boolean getIsFoggy() {
+        return this.isFoggy;
+    }
+
+    public int getFogTime() {
+        return this.fogTime;
+    }
+
+    public float getFogLevel() {
+        return this.fogLevel;
+    }
+
+    public float getOldFogLevel() {
+        return this.oldFogLevel;
     }
 }

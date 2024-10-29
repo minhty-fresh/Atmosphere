@@ -12,5 +12,11 @@ public class AtmosphereClient implements ClientModInitializer {
                 AtmosphereClientDataManager.getInstance().isFoggy = true;
             });
         }));
+
+        ClientPlayNetworking.registerGlobalReceiver(WeatherEvents.FOG_END_PACKET_ID, ((client, handler, buf, responseSender) -> {
+            client.execute(() -> {
+                AtmosphereClientDataManager.getInstance().isFoggy = false;
+            });
+        }));
     }
 }

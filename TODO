@@ -2,10 +2,10 @@
     - fog weather system
     - cloud weather system
     - config options
-
+    - commands
 
 - todo
-    -
+    - integrate with Fog, test, and add functionality to turn off fog weather underground
 
 - questions
     - PacketUtils.ensureRunningOnSameThread, when is this needed?
