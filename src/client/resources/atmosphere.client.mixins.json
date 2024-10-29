@@ -4,8 +4,15 @@
   "package": "com.minhtyfresh.atmosphere.mixin.client",
   "compatibilityLevel": "JAVA_17",
   "client": [
+    "ClientLevelMixin",
+    "FogRendererMixin",
+    "helper.LevelInvoker",
+    "helper.LevelTimeAccessInvoker",
+    "nostalgictweaks.LightTextureHelperMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [
+  ]
 }

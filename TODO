@@ -1,0 +1,12 @@
+- important things to note:
+    - PlayerList.sendLevelInfo
+    - (DONE) Level.updateSkyBrightness
+    - Level.prepareWeather
+    - (DONE) ClientLevel.getSkyDarken
+
+
+- questions
+    - PacketUtils.ensureRunningOnSameThread, when is this needed?
+
+- known issues
+    - when blindness ends into foggy weather, there's a split second of weird looking transition
