@@ -48,7 +48,6 @@ public abstract class ServerLevelMixin {
 //        }
 //    }
 
-    @Shadow public abstract boolean isFlat();
 
     @Inject(method = "advanceWeatherCycle", at = @At(
             value = "INVOKE",
@@ -96,14 +95,14 @@ public abstract class ServerLevelMixin {
             if (wasFoggyRef.get()) {
                 level.getServer().execute(() -> {
                     FriendlyByteBuf data = PacketByteBufs.create();
-                    level.getServer().getPlayerList().getPlayers().forEach((player) -> { // TODO filter by dimension
+                    players().forEach((player) -> { // TODO filter by dimension
                         ServerPlayNetworking.send(player, WeatherEvents.FOG_END_PACKET_ID, data);
                     });
                 });
             } else {
                 level.getServer().execute(() -> {
                     FriendlyByteBuf data = PacketByteBufs.create();
-                    level.getServer().getPlayerList().getPlayers().forEach((player) -> { // TODO filter by dimension
+                    players().forEach((player) -> { // TODO filter by dimension
                         ServerPlayNetworking.send(player, WeatherEvents.FOG_START_PACKET_ID, data);
                     });
                 });
