@@ -1,5 +1,6 @@
 package com.minhtyfresh.atmosphere.mixin;
 
+import com.minhtyfresh.atmosphere.WeatherData;
 import com.minhtyfresh.atmosphere.helper.LightLevelHelper;
 import com.minhtyfresh.atmosphere.mixin.helper.LevelAccessor;
 import net.minecraft.util.Mth;
@@ -20,4 +21,10 @@ public abstract class LevelMixin implements LevelAccessor {
         this.setSkyDarken((int)((1.0 - f * d * e) * 11.0));
         ci.cancel();
     }
+
+//    @Inject(method = "prepareWeather", at = @At(value = "TAIL"))
+//    protected void prepareWeather(CallbackInfo ci) {
+//        WeatherData weatherData = WeatherData.get((Level)(Object)this);
+//
+//    }
 }

@@ -6,12 +6,15 @@
 
 - todo
     - integrate with Fog, test, and add functionality to turn off fog weather underground
+    - use fogLevel to smoothly fade fog in and out
+    - figure out a way to have different fog weather intensities
 
 - questions
     - PacketUtils.ensureRunningOnSameThread, when is this needed?
 
 - known issues
     - when blindness ends into foggy weather, there's a split second of weird looking transition
+    - initial fog when starting up game is not synced, takes a few moments
 
 - important things to note:
     - PlayerList.sendLevelInfo

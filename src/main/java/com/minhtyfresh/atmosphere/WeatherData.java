@@ -2,6 +2,7 @@ package com.minhtyfresh.atmosphere;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
@@ -48,11 +49,13 @@ public class WeatherData extends SavedData {
         this.fogTime = fogTime;
     }
 
-    public void setFogLevel(float FogLevel) {
+    public void setFogLevel(float fogLevel) {
+        fogLevel = Mth.clamp(fogLevel, 0.0F, 1.0F);
         this.fogLevel = fogLevel;
     }
 
     public void setOldFogLevel(float oldFogLevel) {
+        oldFogLevel = Mth.clamp(oldFogLevel, 0.0F, 1.0F);
         this.oldFogLevel = oldFogLevel;
     }
 

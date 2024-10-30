@@ -28,14 +28,13 @@ public abstract class FogRendererMixin {
             FogRenderer.FogMode fogMode,
             float farPlaneDistance,
             boolean levelOrSpecialFog,
-            float f,
+            float partialTick,
             CallbackInfo ci,
             @Share("hasMobEffectFog") LocalBooleanRef hasMobEffectFogRef
     )
     {
         // todo set up config to disable
-        // Minecraft.getInstance().level.
-        if (AtmosphereClientDataManager.getInstance().isFoggy
+        if (AtmosphereClientDataManager.getInstance().fogLevel > 0
                 && camera.getFluidInCamera() == FogType.NONE // not in liquid
                 && !levelOrSpecialFog                        // don't override nether fog and other special fog conditions
                 && !hasMobEffectFogRef.get()                 // don't override mob effect fog functions like blindness
@@ -50,8 +49,8 @@ public abstract class FogRendererMixin {
             Camera camera,
             FogRenderer.FogMode fogMode,
             float farPlaneDistance,
-            boolean bl,
-            float f,
+            boolean levelOrSpecialFog,
+            float partialTick,
             CallbackInfo ci,
             @Share("hasMobEffectFog") LocalBooleanRef hasMobEffectFogRef) {
         hasMobEffectFogRef.set(false);
@@ -66,8 +65,8 @@ public abstract class FogRendererMixin {
             Camera camera,
             FogRenderer.FogMode fogMode,
             float farPlaneDistance,
-            boolean bl,
-            float f,
+            boolean levelOrSpecialFog,
+            float partialTick,
             CallbackInfo ci,
             @Share("hasMobEffectFog") LocalBooleanRef hasMobEffectFogRef) {
         hasMobEffectFogRef.set(true);
