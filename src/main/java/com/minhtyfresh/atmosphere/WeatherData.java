@@ -17,27 +17,47 @@ public class WeatherData extends SavedData {
     private float oldFogLevel;
     private float fogLevel;
 
+    private static String KEY_IS_FOGGY = "KEY_IS_FOGGY";
+    private static String KEY_FOG_TIME = "KEY_FOG_TIME";
+    private static String KEY_OLD_FOG_LEVEL = "KEY_OLD_FOG_LEVEL";
+    private static String KEY_FOG_LEVEL = "KEY_FOG_LEVEL";
+
+
+    private static WeatherData clientCache = new WeatherData();
+    private static Level clientLevelCache = null;
+
     @Override
     public @NotNull CompoundTag save(CompoundTag nbt) {
-        nbt.putBoolean("isfoggy", this.isFoggy);
-        nbt.putInt("fogtime", this.fogTime);
+        nbt.putBoolean(KEY_IS_FOGGY, this.isFoggy);
+        nbt.putInt(KEY_FOG_TIME, this.fogTime);
+        nbt.putFloat(KEY_OLD_FOG_LEVEL, this.oldFogLevel);
+        nbt.putFloat(KEY_FOG_LEVEL, this.fogLevel);
         return nbt;
     }
 
     public static WeatherData get(Level world) {
         if (world instanceof ServerLevel) {
-            DimensionDataStorage dataStorage = world.getServer().getLevel(Level.OVERWORLD).getDataStorage();
-            return dataStorage.computeIfAbsent(WeatherData::load, WeatherData::new, NAME);
+            DimensionDataStorage dataStorage = ((ServerLevel)world).getDataStorage();
+            WeatherData data = dataStorage.computeIfAbsent(WeatherData::load, WeatherData::new, NAME);
+            data.setDirty();
+            return data;
         } else {
-            throw new RuntimeException("Game attempted to load server-side weather data from a client-side world.");
+            if (clientLevelCache != world) {
+                clientLevelCache = world;
+                clientCache = new WeatherData();
+            }
+            return clientCache;
         }
     }
 
     public static WeatherData load(CompoundTag nbt) {
         WeatherData data = new WeatherData();
-        data.setIsFoggy(nbt.getBoolean("isfoggy"));
-        data.setFogTime(nbt.getInt("fogtime"));
-        Atmosphere.LOGGER.info("Weather data loaded successfully. isFoggy={}, fogTime={}", data.isFoggy, data.fogTime);
+        data.setIsFoggy(nbt.getBoolean(KEY_IS_FOGGY));
+        data.setFogTime(nbt.getInt(KEY_FOG_TIME));
+        data.setOldFogLevel(nbt.getInt(KEY_OLD_FOG_LEVEL));
+        data.setFogLevel(nbt.getInt(KEY_FOG_LEVEL));
+        Atmosphere.LOGGER.info("Weather data loaded successfully. isFoggy={}, fogTime={}, oldFogLevel={}, fogLevel={}",
+                data.isFoggy, data.fogTime, data.oldFogLevel, data.fogLevel);
         return data;
     }
 

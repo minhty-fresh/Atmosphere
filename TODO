@@ -1,7 +1,10 @@
 - features
     - fog weather system
+        - variable fog intensity
     - cloud weather system
-    - config options
+    - light rain weather
+    - config options for fog, cloud weather, darker rain
+    - config options for rain and thunder
     - commands
 
 - todo
@@ -14,7 +17,7 @@
 
 - known issues
     - when blindness ends into foggy weather, there's a split second of weird looking transition
-    - initial fog when starting up game is not synced, takes a few moments
+    - (FIXED) initial fog when starting up game is not synced, takes a few moments
 
 - important things to note:
     - PlayerList.sendLevelInfo

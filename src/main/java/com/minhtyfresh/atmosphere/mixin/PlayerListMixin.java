@@ -1,5 +1,6 @@
 package com.minhtyfresh.atmosphere.mixin;
 
+import com.minhtyfresh.atmosphere.Atmosphere;
 import com.minhtyfresh.atmosphere.WeatherData;
 import com.minhtyfresh.atmosphere.event.WeatherEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -16,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PlayerList.class)
 public class PlayerListMixin {
 
-    @Inject( method = "sendLevelInfo", at = @At(value = "TAIL"))
+    @Inject( method = "sendLevelInfo", at = @At(value = "HEAD"))
     public void sendLevelInfo(ServerPlayer player, ServerLevel level, CallbackInfo ci) {
         FriendlyByteBuf data = PacketByteBufs.create();
         data.writeFloat(WeatherData.get(level).getFogLevel());

@@ -1,6 +1,6 @@
 package com.minhtyfresh.atmosphere.helper;
 
-import com.minhtyfresh.atmosphere.client.AtmosphereClientDataManager;
+import com.minhtyfresh.atmosphere.WeatherData;
 import com.mojang.blaze3d.shaders.FogShape;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -26,7 +26,8 @@ public class OverworldFogRenderer {
 
         fogStartSetter.accept(0f);
         // todo mqd define minimum fog distance in a way that isn't dependent on render distance
-        float fogEndPercent = (1 - AtmosphereClientDataManager.getInstance().fogLevel * 0.9f);
+        WeatherData weatherData = WeatherData.get(Minecraft.getInstance().level);
+        float fogEndPercent = (1 - weatherData.getFogLevel() * 0.9f);
         fogEndSetter.accept(fogEndPercent * getFarPlaneRenderDistance());
 
         return true;

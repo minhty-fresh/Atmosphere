@@ -4,7 +4,10 @@
   "package": "com.minhtyfresh.atmosphere.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ServerLevelMixin"
+    "LevelMixin",
+    "PlayerListMixin",
+    "ServerLevelMixin",
+    "helper.LevelAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

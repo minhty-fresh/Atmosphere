@@ -8,25 +8,19 @@ import com.minhtyfresh.atmosphere.event.WeatherEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.level.progress.ChunkProgressListener;
+import net.minecraft.util.Mth;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.RandomSequences;
-import net.minecraft.world.level.dimension.LevelStem;
-import net.minecraft.world.level.storage.LevelStorageSource;
-import net.minecraft.world.level.storage.ServerLevelData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
-import java.util.concurrent.Executor;
 
 @Mixin(ServerLevel.class)
 public abstract class ServerLevelMixin {
@@ -63,7 +57,7 @@ public abstract class ServerLevelMixin {
             value = "INVOKE",
             target = "Lnet/minecraft/world/level/storage/ServerLevelData;getRainTime()I",
             shift = At.Shift.AFTER, by = 3))
-    private void afterGetRainTime(CallbackInfo ci, @Local(ordinal=0) int clearWeatherTime) {
+    private void advanceAtmosphereWeather_afterGetRainTime_advanceWeatherCycle(CallbackInfo ci, @Local(ordinal=0) int clearWeatherTime) {
         ServerLevel level = (ServerLevel)(Object)this;
         WeatherData weatherData = WeatherData.get(level);
 
@@ -95,9 +89,19 @@ public abstract class ServerLevelMixin {
         }
     }
 
+    // TEST clamping rain to produce light rain
+    // TODO REMOVE
+    @Redirect(method = "advanceWeatherCycle", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/util/Mth;clamp(FFF)F"))
+    private float rainClamp_advanceWeatherCycle(float value, float min, float max) {
+        return Mth.clamp(value, min, 1f);
+        // return value;
+    }
+
     // Set up initial weather conditions to check for changes afterward
     @Inject(method = "advanceWeatherCycle", at = @At(value = "HEAD"))
-    private void beforeAdvanceWeatherCycle(CallbackInfo ci, @Share("wasFoggy") LocalBooleanRef wasFoggyRef) {
+    private void setupComparison_before_AdvanceWeatherCycle(CallbackInfo ci, @Share("wasFoggy") LocalBooleanRef wasFoggyRef) {
         ServerLevel level = (ServerLevel)(Object)this;
         WeatherData weatherData = WeatherData.get(level);
 
@@ -106,7 +110,7 @@ public abstract class ServerLevelMixin {
 
     // Send weather events to players if necessary
     @Inject(method = "advanceWeatherCycle", at = @At(value = "TAIL"))
-    private void afterAdvanceWeatherCycle(CallbackInfo ci, @Share("wasFoggy") LocalBooleanRef wasFoggyRef) {
+    private void syncToClient_after_advanceWeatherCycle(CallbackInfo ci, @Share("wasFoggy") LocalBooleanRef wasFoggyRef) {
         ServerLevel level = (ServerLevel)(Object)this;
         WeatherData weatherData = WeatherData.get(level);
 

@@ -28,23 +28,5 @@ public class Atmosphere implements ModInitializer {
 
     @Override
     public void onInitialize() {
-//        PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, entity) -> {
-//            if (state.getBlock() == Blocks.GRASS_BLOCK || state.getBlock() == Blocks.DIRT) {
-//                StateSaverAndLoader serverState = StateSaverAndLoader.getServerState(world.getServer());
-//                // Increment the amount of dirt blocks that have been broken
-//                serverState.totalDirtBlocksBroken += 1;
-//
-//                // Send a packet to the client
-//                MinecraftServer server = world.getServer();
-//
-//                PacketByteBuf data = PacketByteBufs.create();
-//                data.writeInt(serverState.totalDirtBlocksBroken);
-//
-//                ServerPlayerEntity playerEntity = server.getPlayerManager().getPlayer(player.getUuid());
-//                server.execute(() -> {
-//                    ServerPlayNetworking.send(playerEntity, DIRT_BROKEN, data);
-//                });
-//            }
-//        });
     }
 }
