@@ -40,7 +40,8 @@ public abstract class FogRendererMixin {
                 && !levelOrSpecialFog                        // don't override nether fog and other special fog conditions
                 && !hasMobEffectFogRef.get()                 // don't override mob effect fog functions like blindness
         ) {
-            OverworldFogRenderer.overrideFog(RenderSystem::setShaderFogStart, RenderSystem::setShaderFogEnd);
+            // TODO re-enable
+            OverworldFogRenderer.overrideFog(RenderSystem::getShaderFogEnd, RenderSystem::setShaderFogStart, RenderSystem::setShaderFogEnd);
         }
     }
 

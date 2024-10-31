@@ -5,6 +5,7 @@ import com.mojang.blaze3d.shaders.FogShape;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.FogRenderer;
+import net.minecraft.util.Mth;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -15,6 +16,7 @@ public class OverworldFogRenderer {
     }
 
     public static boolean overrideFog(
+            Supplier<Float> fogEndGetter,
             Consumer<Float> fogStartSetter,
             Consumer<Float> fogEndSetter)
     {
@@ -24,24 +26,30 @@ public class OverworldFogRenderer {
         // todo make fog transition smooth
         // different intensities of fog weather, or a duration, and have the fog start far and then push in and then push out again
 
-        fogStartSetter.accept(0f);
-        // todo mqd define minimum fog distance in a way that isn't dependent on render distance
+        fogStartSetter.accept(-12f); // TODO test different values for different fog intensities
+
+
+        // todo define minimum fog distance in a way that isn't dependent on render distance
         WeatherData weatherData = WeatherData.get(Minecraft.getInstance().level);
-        float fogEndPercent = (1 - weatherData.getFogLevel() * 0.9f);
-        fogEndSetter.accept(fogEndPercent * getFarPlaneRenderDistance());
+        float closestFogDistance = Math.min(getFarPlaneRenderDistance(), 12*7); // TODO set minimum back to 20.0f
+        // want fogLevel = 1.0 -> strongestFogDistance
+        // want fogLevel = 0.0 -> original fogEnd distance
+
+
+        fogEndSetter.accept(Mth.lerp(weatherData.getFogLevel(), fogEndGetter.get(), closestFogDistance));
 
         return true;
     }
 
-    public static boolean setupFog(
-            Camera camera,
-            FogRenderer.FogMode fogMode,
-            Supplier<Float> fogStart,
-            Supplier<Float> fogEnd,
-            Consumer<FogShape> fogShapeSetter,
-            Consumer<Float> fogStartSetter,
-            Consumer<Float> fogEndSetter)
-    {
-        return overrideFog(fogStartSetter, fogEndSetter);
-    }
+//    public static boolean setupFog(
+//            Camera camera,
+//            FogRenderer.FogMode fogMode,
+//            Supplier<Float> fogStart,
+//            Supplier<Float> fogEnd,
+//            Consumer<FogShape> fogShapeSetter,
+//            Consumer<Float> fogStartSetter,
+//            Consumer<Float> fogEndSetter)
+//    {
+//        return overrideFog(fogStartSetter, fogEndSetter);
+//    }
 }

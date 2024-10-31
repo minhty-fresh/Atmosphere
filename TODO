@@ -1,7 +1,10 @@
 - features
     - fog weather system
         - variable fog intensity
+        - morning fog system
+        - fog after rain system
     - cloud weather system
+        - integrate with Cloud Layers mod
     - light rain weather
     - config options for fog, cloud weather, darker rain
     - config options for rain and thunder
@@ -9,18 +12,23 @@
 
 - todo
     - integrate with Fog, test, and add functionality to turn off fog weather underground
-    - use fogLevel to smoothly fade fog in and out
+    - (DONE) use fogLevel to smoothly fade fog in and out
     - figure out a way to have different fog weather intensities
+    - make fog distance independent of render distance, only use render distance as clamp
+    - consider asking about making changes to Cloud Layers
+        - add api for mods to add their own custom clouds, with custom methods that can be passed in for ShouldRender
+        - gradually fade cloudLayers in and out when their shouldRender condition changes, adjust opacity?
 
 - questions
     - PacketUtils.ensureRunningOnSameThread, when is this needed?
 
 - known issues
     - when blindness ends into foggy weather, there's a split second of weird looking transition
+    - harsh transition when fog initially starts up
     - (FIXED) initial fog when starting up game is not synced, takes a few moments
 
 - important things to note:
-    - PlayerList.sendLevelInfo
+    - (DONE) PlayerList.sendLevelInfo
     - (DONE) Level.updateSkyBrightness
-    - Level.prepareWeather
+    - (DONE) Level.prepareWeather
     - (DONE) ClientLevel.getSkyDarken

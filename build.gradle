@@ -43,6 +43,7 @@ repositories {
         }
     }
     maven { url "https://maven.terraformersmc.com/" }
+    maven { url "https://maven.shedaniel.me/" }
     maven {
         name = 'ParchmentMC'
         url = 'https://maven.parchmentmc.org'
@@ -61,10 +62,18 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     // Mod Menu
-    modImplementation "com.terraformersmc:modmenu:${rootProject.fabric_modmenu_version}"
+    modImplementation "com.terraformersmc:modmenu:${project.fabric_modmenu_version}"
 
     // Nostalgic Tweaks Compatibility
-    modImplementation "maven.modrinth:nostalgic-tweaks:$rootProject.nostalgic_tweaks_version"
+    modImplementation "maven.modrinth:nostalgic-tweaks:$project.nostalgic_tweaks_version"
+
+    // Cloud Layers Integration
+    modImplementation "maven.modrinth:cloud-layers:$project.cloud_layers_version"
+
+    // Cloth Config API
+    modApi("me.shedaniel.cloth:cloth-config-fabric:$project.cloth_config_version") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
 }
 
 processResources {

@@ -15,6 +15,7 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -26,10 +27,13 @@ import java.util.List;
 public abstract class ServerLevelMixin {
 
     // todo make this configurable
-    private static final IntProvider FOG_DURATION = UniformInt.of(100, 400);
-    private static final IntProvider FOG_DELAY = UniformInt.of(100, 300);
+    @Unique
+    private static final IntProvider atmosphere$FOG_DURATION = UniformInt.of(100, 400);
+    @Unique
+    private static final IntProvider atmosphere$FOG_DELAY = UniformInt.of(100, 300);
 
-    private static final float FOG_LEVEL_CHANGE_SPEED = 0.1f;
+    @Unique
+    private static final float atmosphere$FOG_LEVEL_CHANGE_SPEED = 0.1f;
     @Shadow public abstract List<ServerPlayer> players();
 
 //    @Inject(method = "advanceWeatherCycle", at = @At("RETURN"))
@@ -72,9 +76,9 @@ public abstract class ServerLevelMixin {
                     isFoggy = !isFoggy;
                 }
             } else if (isFoggy) {
-                fogTime = FOG_DURATION.sample(level.random);
+                fogTime = atmosphere$FOG_DURATION.sample(level.random);
             } else {
-                fogTime = FOG_DELAY.sample(level.random);
+                fogTime = atmosphere$FOG_DELAY.sample(level.random);
             }
         }
 
@@ -83,9 +87,9 @@ public abstract class ServerLevelMixin {
 
         weatherData.setOldFogLevel(weatherData.getFogLevel());
         if (weatherData.getIsFoggy()) {
-            weatherData.setFogLevel(weatherData.getFogLevel()+FOG_LEVEL_CHANGE_SPEED);
+            weatherData.setFogLevel(weatherData.getFogLevel()+ atmosphere$FOG_LEVEL_CHANGE_SPEED);
         } else {
-            weatherData.setFogLevel(weatherData.getFogLevel()-FOG_LEVEL_CHANGE_SPEED);
+            weatherData.setFogLevel(weatherData.getFogLevel()- atmosphere$FOG_LEVEL_CHANGE_SPEED);
         }
     }
 

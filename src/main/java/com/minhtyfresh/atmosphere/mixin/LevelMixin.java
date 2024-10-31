@@ -22,7 +22,7 @@ public abstract class LevelMixin implements LevelAccessor {
 
     @Inject(method = "updateSkyBrightness", at = @At(value = "HEAD"), cancellable = true)
     public void updateSkyBrightness(CallbackInfo ci) {
-        // TODO mqd make this less heavy handed of a mixin
+        // TODO make this less heavy handed of a mixin
         Level level = (Level)(Object)this;
         double d = 1.0 - (double)(level.getRainLevel(1.0F) * LightLevelHelper.RAIN_LIGHT_DAMPEN_LEVEL) / 16.0;
         double e = 1.0 - (double)(level.getThunderLevel(1.0F) * LightLevelHelper.THUNDER_LIGHT_DAMPEN_LEVEL) / 16.0;

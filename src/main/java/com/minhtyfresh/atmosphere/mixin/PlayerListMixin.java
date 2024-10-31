@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerList.class)
-public class PlayerListMixin {
+public abstract class PlayerListMixin {
 
     @Inject( method = "sendLevelInfo", at = @At(value = "HEAD"))
     public void sendLevelInfo(ServerPlayer player, ServerLevel level, CallbackInfo ci) {

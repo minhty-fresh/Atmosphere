@@ -14,5 +14,9 @@
     "defaultRequire": 1
   },
   "mixins": [
+    "cloudlayers.CloudLayersConfigMixin",
+    "cloudlayers.CloudLayersMixin",
+    "cloudlayers.ConfigurableLayerMixin",
+    "cloudlayers.LayerMixin"
   ]
 }
